@@ -67,7 +67,7 @@ main = do
 
 
 
-    post "/cliente" $ do
+    post "/clientes" $ do
       client <- (jsonData :: ActionM Client)
       response <- liftIO $ try $ insertClient conn client
       case response of
@@ -76,7 +76,7 @@ main = do
         Left e -> json (Resultado {tipo= Just error', mensaje= Just (show $ D.sqlErrorMsg e)})
 
 
-    get "/cliente" $ do
+    get "/clientes" $ do
       variable <- liftIO (getAllClientes conn)
       json variable
 
