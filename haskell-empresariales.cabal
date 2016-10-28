@@ -11,7 +11,8 @@ executable hello-scotty
   build-depends:       base                          
                      , scotty                        
                      , bytestring                    
-                     , text                         
+                     , text 
+                     , random                        
                      , postgresql-simple
                      , postgresql-simple-url             
                      , aeson
