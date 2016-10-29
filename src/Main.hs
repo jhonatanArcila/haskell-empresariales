@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, DeriveGeneric, ScopedTypeVariables, ViewPatterns #-}
+  {-# LANGUAGE OverloadedStrings, DeriveGeneric, ScopedTypeVariables, ViewPatterns #-}
 
 module Main where
 
@@ -61,10 +61,14 @@ main = do
 --------------------------------------CLIENTE-----------------------------------
     post "/clientes" $ do
       client <- (jsonData :: ActionM Client)
-      response <- liftIO $ try $ insertClient conn client
-      case response of
-        Right _ -> json (Resultado {tipo= Just success, mensaje= Just "Cliente agregado"}) >> status created201
-        Left e -> json (Resultado {tipo= Just error', mensaje= Just (B.unpack $ D.sqlErrorMsg e)})
+      case (validarCliente client) of
+        []->do
+          response <- liftIO $ try $ insertClient conn client
+          case response of
+            Right _ -> json (Resultado {tipo= Just success, mensaje= Just "Cliente agregado"}) >> status created201
+            Left e -> json (Resultado {tipo= Just error', mensaje= Just (B.unpack $ D.sqlErrorMsg e)})
+        xs->do
+          json (Resultado {tipo= Just error', mensaje= Just ("Campos invalidos: " ++ (concatListString xs))})
 
 
     get "/clientes" $ do
@@ -84,7 +88,6 @@ main = do
             case response of
               Right _ -> json (Resultado {tipo= Just success, mensaje= Just token}) >> status created201
               Left e -> json (Resultado {tipo= Just error', mensaje= Just (B.unpack $ D.sqlErrorMsg e)})
-
 
     put "/cerrarSesion" $ do
       client <- (jsonData :: ActionM Client)

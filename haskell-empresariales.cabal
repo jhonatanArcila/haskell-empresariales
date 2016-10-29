@@ -12,7 +12,8 @@ executable hello-scotty
                      , scotty                        
                      , bytestring                    
                      , text 
-                     , random                        
+                     , random 
+                     , regex-posix                       
                      , postgresql-simple
                      , postgresql-simple-url             
                      , aeson
